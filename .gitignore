@@ -1,0 +1,39 @@
+# Local Terraform working directories and generated state.
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Saved plans and their common exported forms may contain sensitive data.
+*.tfplan
+*.tfplan.*
+*.plan
+*.plan.*
+tfplan
+tfplan.*
+plan.out
+plan.json
+
+# Local input values and overrides; commit placeholder *.example files instead.
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Local environment, CLI credentials and private key material.
+.env
+.env.*
+!.env.example
+.azure/
+.terraformrc
+terraform.rc
+credentials.tfrc.json
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Keep .terraform.lock.hcl tracked for reproducible provider selection.
