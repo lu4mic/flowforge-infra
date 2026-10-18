@@ -55,6 +55,38 @@ owner-authorized teardown and [cleanup verification](https://github.com/lu4mic/f
 Remote-state storage and any retained backups/logs must be included in that
 future cleanup inventory; teardown evidence is not available yet.
 
+## Authentication design — not configured
+
+No Azure identity, federated trust, role assignment or authenticated workflow is
+configured by this repository. The intended boundaries are:
+
+| Work | Authentication boundary |
+| --- | --- |
+| PR/push static validation | No Azure login, OIDC token permission or remote-state access |
+| Future Azure-backed plan | Separately reviewed least-privilege access; account access is not currently authorized |
+| Future apply, deployment and destroy | Manual protected jobs with owner authorization; do not reuse broad write permissions for planning |
+
+Future GitHub jobs should use OIDC federation rather than stored client secrets.
+Grant `id-token: write` only to an authorized job that needs a token; it enables
+token requests, not Azure resource permissions. Restrict trust to the intended
+repository and approved ref/environment, and review Azure role scopes separately.
+Sharing a GitHub Project does not give these two repositories shared cloud trust.
+
+Do not copy a legacy name-only `sub` example into a future trust policy. GitHub
+documents immutable owner/repository IDs in default subjects for repositories
+created after July 15, 2026. Before setup, confirm each repository's actual subject
+format, selected protected environment, issuer and audience. Do not emit or log
+tokens just to populate this document. See the official
+[OIDC reference](https://docs.github.com/en/actions/reference/security/oidc) and
+[Azure OIDC guidance](https://docs.github.com/en/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-azure).
+
+Local account authentication also requires separate owner authorization. Missing
+OIDC configuration must not trigger a fallback to a developer's Azure CLI session
+or a client secret. Backend access/locking permissions and concrete identity
+choices remain in [#2 — Structure and remote state](https://github.com/lu4mic/flowforge-infra/issues/2)
+and [#7 — Managed identity/RBAC](https://github.com/lu4mic/flowforge-infra/issues/7);
+these notes are not login or provisioning instructions.
+
 ## Checks available now
 
 From a checkout, Git-only review needs no Terraform installation or cloud login:
